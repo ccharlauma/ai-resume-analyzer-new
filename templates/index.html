@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Resume Analyzer</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #0b1120;
+    color: #e5e7eb;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #0f172a;
+    padding: 25px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    color: #9ca3af;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 40px;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 900px;
+}
+
+/* TITLE */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* FORM */
+select, input, textarea {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #020617;
+    color: white;
+    font-size: 14px;
+}
+
+/* BIG TEXTAREA */
+textarea {
+    height: 160px;   /* 🔥 THIS FIXES YOUR ISSUE */
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4338ca;
+}
+
+/* CARD */
+.card {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #020617;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* TAGS */
+.tag {
+    padding: 6px 10px;
+    margin: 4px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.good {
+    background: rgba(34,197,94,0.1);
+    color: #22c55e;
+}
+
+.bad {
+    background: rgba(239,68,68,0.1);
+    color: #ef4444;
+}
+
+canvas {
+    max-width: 300px;
+    margin: auto;
+    display: block;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+button {
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.02);
+    background: #6366f1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+   <!-- LOGO -->
+   <div style="margin-bottom:30px;">
+       <div style="display:flex; align-items:center; gap:10px;">
+        
+        <div style="
+            width:32px;
+            height:32px;
+            border-radius:8px;
+            background:#4f46e5;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:600;
+            color:white;
+        ">
+            R
+        </div>
+
+      <div style="font-weight:600;">
+          Resume<span style="color:#4f46e5;">AI</span>
+      </div>
+  </div>
+</div>
+ 
+ <a href="/dashboard">Dashboard</a>
+<a href="/analytics">Analytics</a>
+<a href="/profile">Profile</a>
+<a href="/logout">Logout</a>
+</div>
+
+
+<div class="main">
+<div class="container">
+
+<div class="main">
+
+    <!-- ✅ ADD NAVBAR HERE -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:10px;">
+        <div style="font-size:18px; font-weight:600;">AI Resume Analyzer</div>
+        <div style="font-size:14px; color:#9ca3af;">{{ user }}</div>
+    </div>
+
+    <div class="container">
+
+<div style="text-align:right;">
+    Welcome {{ user }} | <a href="/logout" style="color:#a5b4fc;">Logout</a>
+</div>
+
+<h2>AI Resume Analyzer</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+<select name="job_role" required>
+<option value="">Select Role</option>
+<option>Software Engineer</option>
+<option>Frontend Developer</option>
+<option>Backend Developer</option>
+<option>Data Scientist</option>
+<option>ML Engineer</option>
+<option>DevOps Engineer</option>
+<option>Test Engineer</option>
+</select>
+
+<input type="file" name="resume" required>
+<textarea name="job_description" placeholder="Paste job description..." required></textarea>
+
+<button type="submit">Analyze</button>
+</form>
+
+{% if result %}
+
+<div class="score-box">
+    <h1 id="score">{{ result.score }}%</h1>
+    <p>Match Score</p>
+</div>
+
+<!-- TOP SECTION -->
+<div style="display:flex; gap:20px; margin-top:20px;">
+
+    <!-- LEFT: CHART -->
+    <div class="card" style="flex:1;">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <!-- RIGHT: STATS -->
+    <div style="flex:1;">
+        <div class="card">{{ result.matched|length }} Matched</div>
+        <div class="card" style="margin-top:10px;">{{ result.missing|length }} Missing</div>
+    </div>
+
+</div>
+
+<!-- MATCHED + MISSING -->
+<div class="grid-2">
+
+    <div class="card">
+        <h4>Matched Skills</h4>
+        {% for s in result.matched %}
+        <span class="tag good">{{ s }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h4>Missing Skills</h4>
+        {% for s in result.missing %}
+        <span class="tag bad">{{ s }}</span>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+<!-- JOBS + AI -->
+<div class="grid-2">
+
+    <div class="card">
+        <h4>Recommended Roles</h4>
+        {% for j in result.jobs %}
+        <div class="job">{{ j }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h4>AI Suggestions</h4>
+        <pre>{{ result.ai }}</pre>
+    </div>
+
+</div>
+
+
+<!-- IMPROVED RESUME (FULL WIDTH) -->
+<div class="card">
+    <h4>Improved Resume</h4>
+    <pre>{{ result.improved_resume }}</pre>
+</div>
+
+
+
+<a href="/download">
+    <button>Download Improved Resume</button>
+</a>
+
+<!-- HISTORY -->
+<div class="card" style="margin-top:20px;">
+<h3>History</h3>
+{% for h in history %}
+<div class="job">
+Score: {{ h[0] }}% | {{ h[1] }}
+</div>
+{% endfor %}
+</div>
+
+{% endif %}
+
+<script>
+{% if result %}
+new Chart(document.getElementById("chart"), {
+    type: 'doughnut',
+    data: {
+        labels: ['Matched', 'Missing'],
+        datasets: [{
+            data: [{{ result.matched|length }}, {{ result.missing|length }}],
+            backgroundColor: ['#22c55e','#ef4444'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: "#cbd5e1"
+                }
+            }
+        }
+    }
+});
+let finalScore = {{ result.score }};
+let current = 0;
+
+let interval = setInterval(() => {
+    if (current >= finalScore) {
+        clearInterval(interval);
+    } else {
+        current++;
+        document.getElementById("score").innerText = current + "%";
+    }
+}, 20);
+{% endif %}
+</script>
+
+</body>
+</html>

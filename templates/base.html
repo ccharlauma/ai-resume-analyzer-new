@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ title }}</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Inter, sans-serif;
+    background:#0b1120;
+    color:white;
+    display:flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width:240px;
+    height:100vh;
+    background:#0f172a;
+    padding:25px;
+}
+
+.logo {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:30px;
+}
+
+.logo-box {
+    width:35px;
+    height:35px;
+    background:#4f46e5;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.sidebar a {
+    display:block;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    color:#9ca3af;
+    text-decoration:none;
+}
+
+.sidebar a:hover {
+    background:rgba(255,255,255,0.05);
+    color:white;
+}
+
+/* MAIN */
+.main {
+    flex:1;
+    padding:40px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        <div class="logo-box">R</div>
+        <div>Resume<span style="color:#4f46e5;">AI</span></div>
+    </div>
+
+    <a href="/dashboard">Dashboard</a>
+    <a href="/analytics">Analytics</a>
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #0b1120;
+    color: white;
+    display: flex;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #0f172a;
+    padding: 24px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #9ca3af;
+    display: block;
+    margin: 10px 0;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    color: white;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 40px;
+}
+
+/* CARD */
+.card {
+    background: #020617;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+    max-width: 450px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* BUTTON */
+button {
+    background: #4f46e5;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #4338ca;
+    transform: scale(1.03);
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div style="margin-bottom:30px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="
+                width:32px;
+                height:32px;
+                border-radius:8px;
+                background:#4f46e5;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-weight:600;
+                color:white;
+            ">R</div>
+
+            <div style="font-weight:600;">
+                Resume<span style="color:#4f46e5;">AI</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="/dashboard">Dashboard</a>
+    <a href="/analytics">Analytics</a>
+    <a href="/profile" style="color:white;">Profile</a>
+    <a href="/logout">Logout</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <h2>Profile</h2>
+
+    <!-- USER CARD -->
+    <div class="card" style="margin-bottom:20px;">
+        <h3>{{ user }}</h3>
+        <p style="color:#9ca3af;">Software Developer</p>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="card">
+        <h3>Actions</h3>
+
+        <a href="/edit-profile" style="text-decoration:none;">
+            <button style="margin-bottom:10px;">Edit Profile</button>
+        </a>
+
+        <a href="/change-password" style="text-decoration:none;">
+            <button>Change Password</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

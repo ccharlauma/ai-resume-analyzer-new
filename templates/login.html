@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.box {
+    width:350px;
+    padding:35px;
+    border-radius:20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+}
+
+input {
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+    border:none;
+    border-radius:10px;
+    background: rgba(255,255,255,0.08);
+    color:white;
+}
+
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.login-btn {
+    background: #6366f1;
+}
+
+.register-btn {
+    background: #334155;
+}
+
+.error {
+    color:#f87171;
+    text-align:center;
+}
+
+button {
+    background: #4f46e5;
+    color: purple;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<div style="text-align:center; margin-bottom:20px;">
+
+    <!-- LOGO -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:10px;">
+        
+        <div style="
+            width:36px;
+            height:36px;
+            border-radius:8px;
+            background:#4f46e5;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:600;
+            color:white;
+        ">
+            R
+        </div>
+
+        <div style="font-size:18px; font-weight:600;">
+            Resume<span style="color:#4f46e5;">AI</span>
+        </div>
+
+    </div>
+
+    <!-- TITLE -->
+    <h2 style="margin:0;">Welcome</h2>
+
+</div>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<form method="POST">
+<input name="username" placeholder="Username" required>
+<input name="password" type="password" placeholder="Password" required>
+
+<button type="submit" name="action" value="login">Login</button>
+<button type="submit" name="action" value="register">Register</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

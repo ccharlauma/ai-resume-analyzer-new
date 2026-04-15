@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, sqlite3, pdfplumber
-import os
-import openai
 
-openai.api_key = os.environ.get("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")
 app = Flask(__name__)
 app.secret_key = "secret123"
 
@@ -24,20 +21,7 @@ def init_db():
 
 init_db()
 
-
-def get_ai_suggestions(resume):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": f"Improve this resume:\n{resume}"}
-            ]
-        )
-        return response["choices"][0]["message"]["content"]
-    except:
-        return "AI suggestions not available"
-
-# ---------------- ROOT ROUTE ----------------
+# ---------------- ROOT ----------------
 @app.route("/")
 def home():
     if "user" in session:
@@ -117,8 +101,8 @@ def dashboard():
 
         score = int((match_count / len(job_words)) * 100) if job_words else 0
 
-        # TEMP AI (no API key issues)
-        ai_text = get_ai_suggestions(resume)
+        # AI REMOVED (SAFE)
+        ai_text = "AI temporarily disabled"
 
         jobs = []
         if "python" in matched:

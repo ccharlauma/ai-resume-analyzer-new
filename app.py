@@ -173,4 +173,6 @@ def logout():
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+
+    # ✅ Enable HTTPS (self-signed)
+    app.run(host="0.0.0.0", port=port, ssl_context="adhoc", debug=True)

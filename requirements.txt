@@ -1,4 +1,5 @@
 Flask
 pdfplumber
-werkzeug
 openai
+gunicorn
+werkzeug

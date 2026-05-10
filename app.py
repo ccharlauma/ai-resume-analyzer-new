@@ -1,8 +1,29 @@
+import sqlite3
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, sqlite3, pdfplumber
 
 app = Flask(__name__)
+def init_db():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS analyses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT,
+            filename TEXT,
+            score TEXT,
+            created_at TEXT
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+init_db()
+
 app.secret_key = "secret123"
 
 UPLOAD_FOLDER = "uploads"
@@ -148,14 +169,36 @@ def analytics():
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
 
-    c.execute("SELECT score FROM history WHERE username=?", (session["user"],))
+    # Get all scores for logged-in user
+    c.execute(
+        "SELECT score FROM history WHERE username=?",
+        (session["user"],)
+    )
+
     data = c.fetchall()
 
     conn.close()
 
+    # Convert scores into integer list
     scores = [int(i[0]) for i in data]
 
-    return render_template("analytics.html", scores=scores)
+    # Analytics calculations
+    total_analyses = len(scores)
+
+    average_score = 0
+    highest_score = 0
+
+    if scores:
+        average_score = sum(scores) / len(scores)
+        highest_score = max(scores)
+
+    return render_template(
+        "analytics.html",
+        scores=scores,
+        total_analyses=total_analyses,
+        average_score=average_score,
+        highest_score=highest_score
+    )
 
 # ---------------- PROFILE ----------------
 @app.route("/profile")

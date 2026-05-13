@@ -3,3 +3,4 @@ pdfplumber
 openai
 gunicorn
 werkzeug
+reportlab

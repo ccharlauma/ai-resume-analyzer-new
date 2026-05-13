@@ -1,4 +1,6 @@
 import sqlite3
+from flask import send_file
+from reportlab.pdfgen import canvas
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -198,6 +200,41 @@ def analytics():
         total_analyses=total_analyses,
         average_score=average_score,
         highest_score=highest_score
+    )
+
+# ---------------- PDF REPORT ----------------
+@app.route("/download-report")
+def download_report():
+
+    pdf_file = "report.pdf"
+
+    c = canvas.Canvas(pdf_file)
+
+    c.setFont("Helvetica-Bold", 20)
+    c.drawString(180, 800, "AI Resume Report")
+
+    c.setFont("Helvetica", 14)
+
+    c.drawString(50, 750, "Resume Score: 85%")
+
+    c.drawString(50, 710, "Matched Skills:")
+    c.drawString(70, 690, "• Python")
+    c.drawString(70, 670, "• Flask")
+    c.drawString(70, 650, "• SQL")
+
+    c.drawString(50, 610, "Missing Skills:")
+    c.drawString(70, 590, "• AWS")
+    c.drawString(70, 570, "• Docker")
+
+    c.drawString(50, 530, "Suggestions:")
+    c.drawString(70, 510, "• Add cloud projects")
+    c.drawString(70, 490, "• Improve resume summary")
+
+    c.save()
+
+    return send_file(
+        pdf_file,
+        as_attachment=True
     )
 
 # ---------------- PROFILE ----------------
